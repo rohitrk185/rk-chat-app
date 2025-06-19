@@ -1,10 +1,10 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "main": "dist/app.js",
+  "main": "dist/src/app.js",
   "scripts": {
     "build": "npx prisma generate && npx tsc",
-    "start": "node dist/app.js",
+    "start": "node dist/src/app.js",
     "dev": "ts-node-dev --respawn src/app.ts"
   },
   "keywords": [],
@@ -24,8 +24,6 @@
     "@types/express": "^5.0.3",
     "@types/node": "^24.0.3",
     "nodemon": "^3.1.10",
-    "prisma": "^6.10.1",
-    "ts-node-dev": "^2.0.0",
     "typescript": "^5.8.3"
   }
 }

@@ -30,15 +30,12 @@ export async function clerkAuthWebhook(req: Request, res: Response) {
 
   // Get the body
   const payload = req.body;
-  const body = JSON.stringify(payload);
-
-  console.log("req payload: ", payload);
 
   const wh = new Webhook(WEBHOOK_SECRET);
   let evt: WebhookEvent;
 
   try {
-    evt = wh.verify(body, {
+    evt = wh.verify(payload, {
       "svix-id": svix_id,
       "svix-timestamp": svix_timestamp,
       "svix-signature": svix_signature,

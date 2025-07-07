@@ -1,10 +1,12 @@
-import type { Response } from "express";
+import type { Response, Request } from "express";
 import { db } from "../lib/db";
 import { AuthenticatedRequest } from "../types";
+import { getAuth } from "@clerk/express";
 
-export async function searchUsers(req: AuthenticatedRequest, res: Response) {
+export async function searchUsers(req: Request, res: Response) {
   try {
-    const currentUserId = req.auth?.userId;
+    // const currentUserId = req.auth.;
+    const { userId: currentUserId } = getAuth(req);
     if (!currentUserId) {
       return res.status(401).json({ error: "User not authenticated" });
     }

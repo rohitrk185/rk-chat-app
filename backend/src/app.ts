@@ -4,6 +4,7 @@ import cors from "cors";
 import { handleClerkWebhook } from "./routes/clerkWebhook";
 import userRoutes from "./routes/users";
 import { errorHandler } from "./middleware/errorHandler";
+import { clerkMiddleware } from "@clerk/express";
 
 // Load env vars from .env.local
 dotenv.config({ path: ".env" });
@@ -23,6 +24,7 @@ app.post(
 
 // JSON Parser
 app.use(express.json());
+app.use(clerkMiddleware());
 
 // --- API Routes ---
 app.get("/api/health", (req, res) => {

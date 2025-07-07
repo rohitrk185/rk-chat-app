@@ -1,6 +1,5 @@
 import type { Response, Request } from "express";
 import { db } from "../lib/db";
-import { AuthenticatedRequest } from "../types";
 import { getAuth } from "@clerk/express";
 
 export async function searchUsers(req: Request, res: Response) {

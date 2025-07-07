@@ -3,20 +3,18 @@ import dotenv from "dotenv";
 import cors from "cors";
 import { handleClerkWebhook } from "./routes/clerkWebhook";
 
-// Load environment variables from .env.local
+// Load env vars from .env.local
 dotenv.config({ path: ".env.local" });
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// --- Middleware ---
-// 1. CORS: Allow requests from your frontend
+// CORS: Allow requests from frontend
 app.use(cors({ origin: process.env.CORS_ORIGIN }));
 
-//  Webhook Route: Special case for Clerk webhook, needs raw body
-// This route must be defined *before* express.json()
+// Webhook Route: Special case for Clerk webhook, needs raw body
 app.post(
-  "/api/webhooks/clerk",
+  "/api/webhooks/clerk/auth",
   express.raw({ type: "application/json" }),
   handleClerkWebhook
 );

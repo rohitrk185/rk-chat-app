@@ -4,7 +4,7 @@ import cors from "cors";
 import { handleClerkWebhook } from "./routes/clerkWebhook";
 
 // Load env vars from .env.local
-dotenv.config({ path: ".env.local" });
+dotenv.config({ path: ".env" });
 
 const app = express();
 const PORT = process.env.PORT || 3001;

@@ -15,4 +15,39 @@ model User {
   imageUrl  String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  chats     Participant[] // a user can be in many chats
+  messages  Message[]
+}
+
+model Chat {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  participants Participant[]
+  messages     Message[]
+}
+
+model Participant {
+  id        String   @id @default(cuid())
+  userId    String
+  chatId    String
+
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  chat      Chat    @relation(fields: [chatId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, chatId]) // A user can only be in a chat once
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  text      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  senderId  String
+  chatId    String
+  sender    User    @relation(fields: [senderId], references: [id], onDelete: Cascade)
+  Chat      Chat    @relation(fields: [chatId], references: [id], onDelete: Cascade)
 }

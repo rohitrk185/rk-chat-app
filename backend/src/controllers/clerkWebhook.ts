@@ -17,6 +17,12 @@ export async function clerkAuthWebhook(req: Request, res: Response) {
   const svix_timestamp = req.header("svix-timestamp");
   const svix_signature = req.header("svix-signature");
 
+  console.log("req headers: ", {
+    svix_id,
+    svix_timestamp,
+    svix_signature,
+  });
+
   if (!svix_id || !svix_timestamp || !svix_signature) {
     res.status(400).json({ error: "Error occured -- no svix headers" });
     return;
@@ -25,6 +31,8 @@ export async function clerkAuthWebhook(req: Request, res: Response) {
   // Get the body
   const payload = req.body;
   const body = JSON.stringify(payload);
+
+  console.log("req payload: ", payload);
 
   const wh = new Webhook(WEBHOOK_SECRET);
   let evt: WebhookEvent;
@@ -35,8 +43,10 @@ export async function clerkAuthWebhook(req: Request, res: Response) {
       "svix-timestamp": svix_timestamp,
       "svix-signature": svix_signature,
     }) as WebhookEvent;
-  } catch (err) {
+  } catch (err: any) {
     console.error("Error verifying webhook:", err);
+    console.error("stack trace:", err.stack);
+
     res.status(400).json({ Error: err });
     return;
   }

@@ -4,7 +4,7 @@ import { db } from "../lib/db";
 import { Request, Response } from "express";
 
 export async function clerkAuthWebhook(req: Request, res: Response) {
-  const WEBHOOK_SECRET = process.env.CLERK_WEBHOOK_SECRET;
+  const WEBHOOK_SECRET = process.env.CLERK_WEBHOOK_SIGNING_SECRET;
 
   if (!WEBHOOK_SECRET) {
     throw new Error(

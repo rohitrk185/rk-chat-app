@@ -1,14 +1,15 @@
+console.log();
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import { errorHandler } from "./middleware/errorHandler";
 import { clerkMiddleware } from "@clerk/express";
 import { createServer } from "http";
-import { Server } from "socket.io";
 
 import { handleClerkWebhook } from "./routes/clerkWebhook";
 import userRoutes from "./routes/users";
 import chatRoutes from "./routes/chats";
+import { initializeSocket } from "./services/socketService";
 
 // Load env vars from .env.local
 dotenv.config({ path: ".env" });
@@ -17,19 +18,11 @@ const PORT = process.env.PORT || 3001;
 const app = express();
 const httpServer = createServer(app);
 
-const io = new Server(httpServer, {
-  cors: {
-    origin: process.env.CORS_ORIGIN,
-    methods: ["GET", "POST"],
-  },
-});
+// Initialize Socket.io
+initializeSocket(httpServer);
 
-// --- Middleware ---
 // CORS: Allow requests from frontend
 app.use(cors({ origin: process.env.CORS_ORIGIN }));
-// JSON Parser
-app.use(express.json());
-app.use(clerkMiddleware());
 
 // --- Webhooks ---
 // Webhook Route: Special case for Clerk webhook, needs raw body
@@ -38,6 +31,11 @@ app.post(
   express.raw({ type: "application/json" }),
   handleClerkWebhook
 );
+
+// --- Middleware ---
+// JSON Parser
+app.use(express.json());
+app.use(clerkMiddleware());
 
 // --- API Routes ---
 app.get("/api/health", (req, res) => {
@@ -48,15 +46,6 @@ app.use("/api/chats", chatRoutes);
 
 // --- Error Handler ---
 app.use(errorHandler);
-
-// --- Socket.io ---
-io.on("connection", (socket) => {
-  console.log("A user connected: ", socket.id);
-
-  socket.on("disconnect", () => {
-    console.log("A user disconnected: ", socket.id);
-  });
-});
 
 // --- Server Startup ---
 // Start http server instead of Express app

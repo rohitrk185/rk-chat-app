@@ -8,6 +8,17 @@ type IncomingMessage = {
   text: string;
 };
 
+/**
+ * Initializes the Socket.io service.
+ * @param httpServer - The HTTP server instance to attach the socket service to.
+ * @returns The Socket.io server instance.
+ * @remarks
+ * This function initializes the Socket.io service and enables real-time
+ * communication between the client and the server. It sets up the Socket.io
+ * server to listen for incoming connections, and defines event handlers for
+ * various events such as "connection", "joinRoom", "sendMessage", "typing",
+ * and "disconnect".
+ */
 export const initializeSocket = (httpServer: HttpServer) => {
   const io = new Server(httpServer, {
     cors: {

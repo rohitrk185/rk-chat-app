@@ -1,6 +1,4 @@
-import { useAuth } from "@clerk/nextjs";
-
-export type Chat = any;
+import { Chat } from "@/types";
 
 /**
  * Fetches the list of chats for the currently authenticated user.

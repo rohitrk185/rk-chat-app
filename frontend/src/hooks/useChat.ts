@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "@clerk/nextjs";
 
-import { Chat, getChats } from "@/services/chatApi";
+import { getChats } from "@/services/chatApi";
+import { Chat } from "@/types";
 
 export function useChats() {
   const { getToken } = useAuth();

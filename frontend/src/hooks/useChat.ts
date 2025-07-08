@@ -1,0 +1,36 @@
+import { useEffect, useState } from "react";
+import { useAuth } from "@clerk/nextjs";
+
+import { Chat, getChats } from "@/services/chatApi";
+
+export function useChats() {
+  const { getToken } = useAuth();
+  const [chats, setChats] = useState<Chat[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchChats = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
+        const fetchedChats = await getChats(getToken);
+        setChats(fetchedChats);
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Error fetching chats:", error);
+        const errorMessage =
+          error instanceof Error
+            ? error.message
+            : "An unexpected error occurred";
+        setError(errorMessage);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchChats();
+  }, [getToken]);
+
+  return { chats, isLoading, error };
+}

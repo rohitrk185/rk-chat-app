@@ -15,22 +15,24 @@ type Chat = {
 
 interface ChatListItemProps {
   chat: Chat;
-  // We'll use this later to highlight the selected chat
-  // isSelected?: boolean;
+  isSelected: boolean;
+  onSelect: () => void;
 }
 
-const ChatListItem = ({ chat }: ChatListItemProps) => {
+const ChatListItem = ({ chat, isSelected, onSelect }: ChatListItemProps) => {
   const lastMessageText = chat.lastMessage?.text || "No messages yet";
   const truncatedText =
     lastMessageText.length > 25
       ? `${lastMessageText.substring(0, 25)}...`
       : lastMessageText;
 
+  // Use a dynamic class for the background color
+  const itemClasses = `flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-colors duration-200 ${
+    isSelected ? "bg-sky-500/30" : "hover:bg-slate-700"
+  }`;
+
   return (
-    <a
-      href="#" // We will replace this with routing logic later
-      className="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-700 transition-colors duration-200"
-    >
+    <div onClick={onSelect} className={itemClasses}>
       <Avatar
         src={chat.otherUser.imageUrl}
         fallback={chat.otherUser.username?.[0] || "U"}
@@ -42,7 +44,7 @@ const ChatListItem = ({ chat }: ChatListItemProps) => {
         <p className="text-sm text-slate-400 truncate">{truncatedText}</p>
       </div>
       {/* We can add a timestamp or notification dot here later */}
-    </a>
+    </div>
   );
 };
 

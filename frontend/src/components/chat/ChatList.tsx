@@ -9,9 +9,17 @@ interface ChatListProps {
   chats: Chat[];
   isLoading: boolean;
   error: string | null;
+  onChatSelect: (chat: Chat) => void;
+  selectedChatId?: string | null;
 }
 
-const ChatList = ({ chats, isLoading, error }: ChatListProps) => {
+const ChatList = ({
+  chats,
+  isLoading,
+  error,
+  onChatSelect,
+  selectedChatId,
+}: ChatListProps) => {
   return (
     <div className="flex flex-col h-full">
       <div className="p-4">
@@ -42,7 +50,12 @@ const ChatList = ({ chats, isLoading, error }: ChatListProps) => {
         {!isLoading && !error && (
           <nav className="p-2 space-y-1">
             {chats.map((chat) => (
-              <ChatListItem key={chat.chatId} chat={chat} />
+              <ChatListItem
+                key={chat.chatId}
+                chat={chat}
+                isSelected={chat.chatId === selectedChatId}
+                onSelect={() => onChatSelect(chat)}
+              />
             ))}
           </nav>
         )}

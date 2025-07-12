@@ -33,6 +33,8 @@ export async function searchUsers(req: Request, res: Response) {
         email: true,
         username: true,
         imageUrl: true,
+        firstName: true,
+        lastName: true,
       },
     });
 

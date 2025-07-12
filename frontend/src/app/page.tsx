@@ -10,8 +10,17 @@ import ChatWindow from "@/components/chat/ChatWindow";
 import { Chat } from "@/types";
 
 export default function Home() {
-  const { chats, isLoading, error } = useChats();
+  const { chats, isLoading, error, refetchChats } = useChats();
   const [selectedChat, setSelectedChat] = useState<Chat | null>(null);
+
+  // This function will be called by ChatList after a new chat is created
+  const handleChatCreated = () => {
+    // Refetch the entire chat list to include the new one
+    refetchChats();
+    // In a more advanced implementation, you might get the new chat object
+    // back from the API and add it to the state directly, then select it.
+    // For now, refetching is simple and effective.
+  };
 
   return (
     <main className="flex h-screen w-full bg-slate-900 text-slate-100 font-sans">
@@ -27,6 +36,7 @@ export default function Home() {
           error={error}
           onChatSelect={setSelectedChat}
           selectedChatId={selectedChat?.chatId || null}
+          onChatCreated={handleChatCreated} // Pass the new handler down
         />
       </div>
 

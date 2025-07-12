@@ -6,6 +6,8 @@ type Chat = {
   otherUser: {
     username: string | null;
     imageUrl: string | null;
+    firstName: string | null;
+    lastName: string | null;
   };
   lastMessage: {
     text: string;
@@ -26,6 +28,13 @@ const ChatListItem = ({ chat, isSelected, onSelect }: ChatListItemProps) => {
       ? `${lastMessageText.substring(0, 25)}...`
       : lastMessageText;
 
+  const displayName =
+    `${chat.otherUser.firstName || ""} ${chat.otherUser.lastName || ""}`.trim() ||
+    chat.otherUser.username ||
+    "Unknown User";
+
+  const fallback = displayName[0] || "U";
+
   // Use a dynamic class for the background color
   const itemClasses = `flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-colors duration-200 ${
     isSelected ? "bg-sky-500/30" : "hover:bg-slate-700"
@@ -33,14 +42,9 @@ const ChatListItem = ({ chat, isSelected, onSelect }: ChatListItemProps) => {
 
   return (
     <div onClick={onSelect} className={itemClasses}>
-      <Avatar
-        src={chat.otherUser.imageUrl}
-        fallback={chat.otherUser.username?.[0] || "U"}
-      />
+      <Avatar src={chat.otherUser.imageUrl} fallback={fallback} />
       <div className="flex-1 overflow-hidden">
-        <p className="font-semibold truncate">
-          {chat.otherUser.username || "Unknown User"}
-        </p>
+        <p className="font-semibold truncate">{displayName}</p>
         <p className="text-sm text-slate-400 truncate">{truncatedText}</p>
       </div>
       {/* We can add a timestamp or notification dot here later */}

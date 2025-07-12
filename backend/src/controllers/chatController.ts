@@ -56,6 +56,8 @@ export const getUserChats = async (req: Request, res: Response) => {
                 // email: true,
                 username: true,
                 imageUrl: true,
+                firstName: true,
+                lastName: true,
               },
             },
           },
@@ -195,6 +197,77 @@ export const getOrCreateChat = async (req: Request, res: Response) => {
     return;
   } catch (error) {
     console.error("Error getting or creating chat:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+    return;
+  }
+};
+
+/**
+ * Retrieves the messages of a chat.
+ *
+ * The user is required to be authenticated and a participant of the chat.
+ * The response is a JSON array of messages in the chat, ordered by the
+ * creation time (ascending). Each message includes the details of the
+ * sender, including their clerkId, username, and imageUrl.
+ *
+ * @param req - The request object containing authentication and query info.
+ * @param res - The response object used to send the result or error.
+ *
+ * @throws {Error} If the user is not authenticated.
+ * @throws {Error} If the chatId is missing.
+ * @throws {Error} If the user is not a participant of the chat.
+ * @throws {Error} If an error occurs during the process.
+ */
+export const getChatMessages = async (req: Request, res: Response) => {
+  try {
+    const { userId: currentUserId } = getAuth(req);
+    if (!currentUserId) {
+      res.status(401).json({ error: "User not authenticated" });
+      return;
+    }
+
+    const { chatId } = req.params;
+    if (!chatId) {
+      res.status(400).json({ error: "Missing chatId" });
+      return;
+    }
+
+    // Verify if the user is a participant of the chat
+    const participant = await db.participant.findFirst({
+      where: {
+        chatId,
+        user: {
+          clerkId: currentUserId,
+        },
+      },
+    });
+    if (!participant) {
+      res.status(403).json({ error: "User is not a participant of the chat" });
+      return;
+    }
+
+    const messages = await db.message.findMany({
+      where: {
+        chatId,
+      },
+      include: {
+        sender: {
+          select: {
+            clerkId: true,
+            username: true,
+            imageUrl: true,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: "asc",
+      },
+    });
+
+    res.status(200).json(messages);
+    return;
+  } catch (error) {
+    console.error("Error getting chat messages:", error);
     res.status(500).json({ error: "Internal Server Error" });
     return;
   }

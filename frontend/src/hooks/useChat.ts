@@ -10,28 +10,26 @@ export function useChats() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchChats = async () => {
-      try {
-        setIsLoading(true);
-        setError(null);
-        const fetchedChats = await getChats(getToken);
-        setChats(fetchedChats);
-        setIsLoading(false);
-      } catch (error) {
-        console.error("Error fetching chats:", error);
-        const errorMessage =
-          error instanceof Error
-            ? error.message
-            : "An unexpected error occurred";
-        setError(errorMessage);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  const fetchChats = async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      const fetchedChats = await getChats(getToken);
+      setChats(fetchedChats);
+      setIsLoading(false);
+    } catch (error) {
+      console.error("Error fetching chats:", error);
+      const errorMessage =
+        error instanceof Error ? error.message : "An unexpected error occurred";
+      setError(errorMessage);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchChats();
   }, [getToken]);
 
-  return { chats, isLoading, error };
+  return { chats, isLoading, error, refetchChats: fetchChats };
 }

@@ -52,7 +52,8 @@ export async function clerkAuthWebhook(req: Request, res: Response) {
 
   // Handle the 'user.created' event
   if (eventType === "user.created") {
-    const { id, email_addresses, image_url, username } = evt.data;
+    const { id, email_addresses, image_url, username, first_name, last_name } =
+      evt.data;
 
     if (!email_addresses || email_addresses.length === 0) {
       res.status(400).json({ error: "No email address provided" });
@@ -64,6 +65,8 @@ export async function clerkAuthWebhook(req: Request, res: Response) {
         data: {
           clerkId: id,
           email: email_addresses[0].email_address,
+          firstName: first_name,
+          lastName: last_name,
           username: username,
           imageUrl: image_url,
         },

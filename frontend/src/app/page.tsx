@@ -23,7 +23,7 @@ export default function Home() {
   };
 
   return (
-    <main className="flex h-screen w-full bg-slate-900 text-slate-100 font-sans">
+    <main className="flex flex-1 w-full bg-slate-900 text-slate-100 font-sans overflow-hidden">
       {/* Sidebar */}
       <div className="flex flex-col w-full max-w-xs border-r border-slate-700 bg-slate-800">
         <div className="p-4 border-b border-slate-700 flex justify-between items-center">

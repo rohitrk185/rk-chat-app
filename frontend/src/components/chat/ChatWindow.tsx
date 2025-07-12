@@ -12,7 +12,6 @@ interface ChatWindowProps {
 
 const ChatWindow = ({ chat }: ChatWindowProps) => {
   const { otherUser } = chat;
-  console.log("otherUser: ", otherUser);
 
   const socket = useSocket();
   const { getToken, userId: currentUserId } = useAuth();

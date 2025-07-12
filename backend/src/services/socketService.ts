@@ -1,4 +1,5 @@
-import { clerkClient } from "@clerk/express";
+// import { clerkClient } from "@clerk/express";
+import { Clerk } from "@clerk/clerk-sdk-node";
 import type { Server as HttpServer } from "http";
 import { Server } from "socket.io";
 import { db } from "../lib/db";
@@ -7,6 +8,9 @@ type IncomingMessage = {
   chatId: string;
   text: string;
 };
+
+// Initialize the Clerk client with your secret key
+const clerk = Clerk({ secretKey: process.env.CLERK_SECRET_KEY });
 
 /**
  * Initializes the Socket.io service.
@@ -35,11 +39,17 @@ export const initializeSocket = (httpServer: HttpServer) => {
     }
 
     try {
-      const session = await clerkClient.sessions.verifySession(
-        socket.id,
-        token
-      );
-      (socket as any).userId = session.userId;
+      // const session = await clerkClient.sessions.verifySession(
+      //   socket.id,
+      //   token
+      // );
+      // (socket as any).userId = session.userId;
+      // next();
+      // Use the modern, networkless JWT verification method.
+      const claims = await clerk.verifyToken(token);
+
+      // The user's ID is in the 'sub' (subject) claim of the JWT.
+      (socket as any).userId = claims.sub;
       next();
     } catch (error) {
       console.error("Error authenticating socket:", error);

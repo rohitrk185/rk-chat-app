@@ -10,7 +10,10 @@ export const useSocket = () => {
     let newSocket: Socket;
 
     const connectSocket = async () => {
-      const token = await getToken();
+      // We now request a short-lived JWT using a specific template.
+      // You can name the template anything you like in your Clerk dashboard.
+      // "chat-app-template" is a good example.
+      const token = await getToken({ template: "chat-app-template" });
       const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
       if (!token || !apiUrl) {

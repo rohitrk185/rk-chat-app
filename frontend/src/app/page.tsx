@@ -23,9 +23,9 @@ export default function Home() {
   };
 
   return (
-    <main className="flex flex-1 w-full bg-slate-900 text-slate-100 font-sans overflow-hidden">
+    <main className="flex w-full h-screen bg-slate-900 text-slate-100 font-sans">
       {/* Sidebar */}
-      <div className="flex flex-col w-full max-w-xs border-r border-slate-700 bg-slate-800">
+      <div className="flex flex-col max-w-xs border-r border-slate-700 bg-slate-800">
         <div className="p-4 border-b border-slate-700 flex justify-between items-center">
           <h1 className="text-xl font-bold">Chats</h1>
           <UserButton afterSignOutUrl="/sign-in" />
@@ -41,7 +41,7 @@ export default function Home() {
       </div>
 
       {/* Main Chat Window */}
-      <div className="flex-1 flex items-center justify-center">
+      <div className="flex-1 flex items-center w-full">
         {selectedChat ? (
           <ChatWindow chat={selectedChat} />
         ) : (

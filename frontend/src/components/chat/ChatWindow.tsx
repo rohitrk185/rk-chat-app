@@ -80,7 +80,7 @@ const ChatWindow = ({ chat }: ChatWindowProps) => {
   };
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full w-full">
       {/* Chat Header */}
       <div className="flex items-center p-4 border-b border-slate-700 bg-slate-800">
         <Avatar src={otherUser.imageUrl} fallback={fallback} />

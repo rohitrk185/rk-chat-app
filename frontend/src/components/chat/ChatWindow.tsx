@@ -84,10 +84,7 @@ const ChatWindow = ({ chat }: ChatWindowProps) => {
     <div className="flex flex-col h-full">
       {/* Chat Header */}
       <div className="flex items-center p-4 border-b border-slate-700 bg-slate-800">
-        <Avatar
-          src={otherUser.imageUrl}
-          fallback={otherUser.username?.[0] || "U"}
-        />
+        <Avatar src={otherUser.imageUrl} fallback={fallback} />
         <div className="ml-4">
           <p className="font-semibold">{displayName}</p>
           <p className="text-sm text-green-400">Online</p>

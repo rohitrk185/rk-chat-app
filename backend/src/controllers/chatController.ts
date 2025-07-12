@@ -72,7 +72,7 @@ export const getUserChats = async (req: Request, res: Response) => {
       },
     });
 
-    // Format the data to be more frontend-friendly
+    // Format the data to be more frontend friendly
     const formattedChats = chats.map((chat) => {
       // Find the other participant in the chat
       const otherUser = chat.participants.find(

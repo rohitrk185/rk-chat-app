@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "dist/src/app.js",
   "scripts": {
-    "build": "npm install && npx tsc",
+    "build": "npm install && npx prisma generate && npx tsc",
     "start": "node dist/src/app.js",
     "dev": "ts-node-dev --respawn src/app.ts",
     "migrate:dev": "npx prisma migrate dev"
